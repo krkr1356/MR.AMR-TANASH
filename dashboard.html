@@ -7,26 +7,32 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --accent: #7f00ff;
-            --bg-dark: #090d16;
-            --card-bg: rgba(22, 28, 46, 0.75);
-            --text-light: #f4f7fe;
-            --text-muted: #94a3b8;
-            --radius: 20px;
+            --primary-color: #00f2fe;
+            --secondary-color: #4facfe;
+            --accent-color: #7f00ff;
+            --neon-glow: rgba(0, 242, 254, 0.6);
+            --dark-bg: #030611;
+            --card-bg: rgba(10, 15, 30, 0.65);
+            --text-light: #94a3b8;
+            --white: #ffffff;
+            --radius: 24px;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
+        /* 🧪 Custom Chemical Cursor */
+        body, a, button, input, select {
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%2300f2fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M10 2v7.31L4.75 18.1A2 2 0 0 0 6.44 21h11.12a2 2 0 0 0 1.69-2.9L14 9.31V2'/><line x1='8.5' y1='2' x2='15.5' y2='2'/><path d='M8.5 15h7'/></svg>") 0 0, auto !important;
+        }
+
         body { 
-            background-color: var(--bg-dark); 
-            color: var(--text-light); 
+            color: var(--white); 
+            background-color: var(--dark-bg); 
             min-height: 100vh; 
             overflow-x: hidden;
             position: relative;
@@ -39,125 +45,254 @@
 
         body.page-loaded { opacity: 1; }
 
-        /* Background Glow */
+        /* 🌌 Canvas & Background Animations */
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
         body::before, body::after {
             content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
+            position: fixed;
+            width: 500px;
+            height: 500px;
             border-radius: 50%;
-            filter: blur(140px);
+            filter: blur(160px);
             z-index: -1;
+            pointer-events: none;
+            animation: pulseGlow 10s infinite alternate ease-in-out;
         }
-        body::before { background: var(--accent); top: -100px; left: -100px; }
-        body::after { background: var(--primary); bottom: 0; right: -100px; opacity: 0.5; }
+        body::before { background: var(--accent-color); top: -150px; left: -150px; opacity: 0.5; }
+        body::after { background: var(--primary-color); bottom: -150px; right: -150px; opacity: 0.4; }
 
-        .container { width: 90%; max-width: 1200px; margin: auto; padding: 20px 0; }
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.3) translate(50px, 50px); }
+        }
+
+        .container { width: 88%; max-width: 1200px; margin: auto; padding: 20px 0; }
 
         /* Header Navigation */
         header {
-            background: rgba(9, 13, 22, 0.8);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(3, 6, 17, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: 18px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .nav-box { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 20px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-        .logo i { color: var(--primary); font-size: 24px; }
+        .logo i { color: var(--primary-color); font-size: 24px; filter: drop-shadow(0 0 10px var(--primary-color)); }
 
         .user-badge {
             background: rgba(0, 242, 254, 0.1);
-            color: var(--primary);
-            padding: 8px 18px;
+            color: var(--primary-color);
+            padding: 8px 20px;
             border-radius: 30px;
             font-weight: 700;
             font-size: 14px;
-            border: 1px solid rgba(0, 242, 254, 0.2);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
         }
 
-        .section-title { margin: 40px 0; text-align: center; }
-        .section-title h1 { font-size: 34px; font-weight: 800; margin-bottom: 8px; }
+        .section-title { margin: 50px 0 40px; text-align: center; }
+        .section-title h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, var(--primary-color) 50%, #9b51e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px rgba(0,242,254,0.3));
+        }
 
-        /* Grade Cards Grid */
+        /* 🧊 3D TILT CARDS GRID */
         .grades-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            perspective: 1000px;
         }
 
         .grade-card {
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: var(--radius);
-            padding: 35px 25px;
+            padding: 40px 25px;
             text-align: center;
-            backdrop-filter: blur(12px);
-            transition: var(--transition);
+            transition: transform 0.1s ease-out, border-color 0.4s ease, box-shadow 0.4s ease;
             text-decoration: none;
             color: inherit;
             display: flex;
             flex-direction: column;
             align-items: center;
+            transform-style: preserve-3d;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            will-change: transform;
         }
 
         .grade-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0, 242, 254, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.2);
+            border-color: rgba(0, 242, 254, 0.6);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 35px var(--neon-glow);
         }
 
         .grade-icon {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             background: rgba(0, 242, 254, 0.1);
-            color: var(--primary);
+            color: var(--primary-color);
             display: flex;
             align-items: center;
+            justify-content: justify;
+            align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 30px;
             margin-bottom: 20px;
+            border: 1px solid rgba(0, 242, 254, 0.3);
             transition: var(--transition);
+            transform: translateZ(30px);
         }
 
         .grade-card:hover .grade-icon {
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: #000;
-            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--primary-color);
+            transform: translateZ(40px) scale(1.1);
         }
 
-        .grade-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #fff; }
-        .grade-card p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+        .grade-card h3 { 
+            font-size: 24px; 
+            font-weight: 800; 
+            margin-bottom: 8px; 
+            color: #fff; 
+            transform: translateZ(25px);
+        }
+
+        .grade-card p { 
+            color: var(--text-light); 
+            font-size: 14px; 
+            margin-bottom: 25px; 
+            transform: translateZ(20px);
+        }
 
         .btn-enter {
-            padding: 10px 24px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 242, 254, 0.3);
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--primary-color);
             transition: var(--transition);
+            transform: translateZ(25px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .grade-card:hover .btn-enter {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: #000;
             border-color: transparent;
+            box-shadow: 0 0 20px var(--neon-glow);
         }
 
+        /* Footer & Badge Styles */
         footer { 
-            background: rgba(9, 13, 22, 0.95); color: var(--text-muted); text-align: center; padding: 20px 0; font-size: 15px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: auto;
+            background: rgba(2, 4, 10, 0.95); 
+            color: var(--text-light); 
+            text-align: center; 
+            padding: 40px 0; 
+            font-size: 15px; 
+            border-top: 1px solid rgba(255,255,255,0.08); 
+            margin-top: auto;
         }
-        .dev-credit { color: var(--primary); font-weight: 800; text-decoration: none; }
+
+        .dev-badge-wrapper {
+            position: relative;
+            display: inline-block;
+            padding: 12px 32px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 50px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 242, 254, 0.1);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .dev-badge-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.4), transparent);
+            transition: 0.6s;
+        }
+
+        .dev-badge-wrapper:hover::before { left: 100%; }
+
+        .dev-badge-wrapper:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 45px rgba(0, 242, 254, 0.5), inset 0 0 25px rgba(0, 242, 254, 0.2);
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .dev-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .dev-icon {
+            color: var(--primary-color);
+            margin: 0 6px;
+            font-size: 15px;
+            animation: pulseIcon 2s infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        .dev-credit {
+            color: #ffffff;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            background: linear-gradient(135deg, var(--primary-color), #ffffff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .dev-credit:hover {
+            transform: scale(1.2) rotate(-2deg);
+            filter: drop-shadow(0 0 25px rgba(0, 242, 254, 1));
+        }
     </style>
 </head>
 <body>
+
+    <!-- Canvas for Dynamic Interactive Background -->
+    <canvas id="bgCanvas"></canvas>
 
     <header>
         <div class="container nav-box">
@@ -170,38 +305,38 @@
 
     <div class="container">
         <div class="section-title">
-            <h1>Select Your <span style="color: var(--primary);">Grade Level</span> 📚</h1>
-            <p style="color: var(--text-muted);">Choose your grade below to access lessons and learning materials.</p>
+            <h1>Select Your <span class="gradient-text">Grade Level</span> 🧪</h1>
+            <p style="color: var(--text-light); font-size: 16px;">Choose your grade below to access lessons and learning materials.</p>
         </div>
 
         <div class="grades-grid">
-            <!-- 🔗 GRADE 5 -->
-            <a href="grade5.html" class="grade-card">
-                <div class="grade-icon"><i class="fa-solid fa-5"></i></div>
+            <!-- GRADE 5 -->
+            <a href="grade5.html" class="grade-card js-tilt">
+                <div class="grade-icon"><i class="fa-solid fa-flask"></i></div>
                 <h3>Grade 5</h3>
                 <p>Primary 5 Science</p>
                 <span class="btn-enter">Enter Class <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <!-- 🔗 GRADE 6 -->
-            <a href="grade6.html" class="grade-card">
-                <div class="grade-icon"><i class="fa-solid fa-6"></i></div>
+            <!-- GRADE 6 -->
+            <a href="grade6.html" class="grade-card js-tilt">
+                <div class="grade-icon"><i class="fa-solid fa-vial"></i></div>
                 <h3>Grade 6</h3>
                 <p>Primary 6 Science</p>
                 <span class="btn-enter">Enter Class <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <!-- 🔗 GRADE 7 -->
-            <a href="grade7.html" class="grade-card">
-                <div class="grade-icon"><i class="fa-solid fa-7"></i></div>
+            <!-- GRADE 7 -->
+            <a href="grade7.html" class="grade-card js-tilt">
+                <div class="grade-icon"><i class="fa-solid fa-atom"></i></div>
                 <h3>Grade 7</h3>
                 <p>Prep 1 Science</p>
                 <span class="btn-enter">Enter Class <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
-            <!-- 🔗 GRADE 8 -->
-            <a href="grade8.html" class="grade-card">
-                <div class="grade-icon"><i class="fa-solid fa-8"></i></div>
+            <!-- GRADE 8 -->
+            <a href="grade8.html" class="grade-card js-tilt">
+                <div class="grade-icon"><i class="fa-solid fa-microscope"></i></div>
                 <h3>Grade 8</h3>
                 <p>Prep 2 Science</p>
                 <span class="btn-enter">Enter Class <i class="fa-solid fa-arrow-right"></i></span>
@@ -211,11 +346,90 @@
 
     <footer>
         <div class="container">
-            <p>Designed & Developed with <i class="fa-solid fa-heart" style="color: #ff4757;"></i> by <a href="https://www.instagram.com/nour_amr1356?igsh=MXQwOTZpNmMwc2sxMw==" target="_blank" class="dev-credit">NOUR</a></p>
+            <div class="dev-badge-wrapper">
+                <p class="dev-text">
+                    Engineered & Crafted with <i class="fa-solid fa-code dev-icon"></i> by 
+                    <a href="https://www.instagram.com/nour_amr1356?igsh=MXQwOTZpNmMwc2sxMw==" target="_blank" class="dev-credit">NOUR</a>
+                </p>
+            </div>
         </div>
     </footer>
 
+    <!-- INTERACTIVE CANVAS + 3D TILT SCRIPT -->
     <script>
+        // Interactive Canvas Particles Engine
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 45;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 0.5,
+                dx: (Math.random() - 0.5) * 0.6,
+                dy: (Math.random() - 0.5) * 0.6,
+                color: Math.random() > 0.5 ? 'rgba(0, 242, 254, ' : 'rgba(127, 0, 255, '
+            });
+        }
+
+        function renderEngine() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((p, index) => {
+                p.x += p.dx;
+                p.y += p.dy;
+
+                if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color + '0.4)';
+                ctx.fill();
+
+                for (let j = index + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 242, 254, ${0.12 - dist / 800})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(renderEngine);
+        }
+        renderEngine();
+
+        // 3D Tilt Effect
+        const tiltCards = document.querySelectorAll('.js-tilt');
+        tiltCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `rotateY(${x / 15}deg) rotateX(${-y / 15}deg) translateY(-8px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateY(0deg) rotateX(0deg) translateY(0px)';
+            });
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('page-loaded');
         });
